@@ -7,18 +7,17 @@ use crate::auxdata::AuxiliaryData;
 use crate::governance::VotingProcedures;
 use crate::plutus::{PlutusData, Redeemers};
 use crate::{
-    NativeScriptList, NetworkId, NonemptySetBootstrapWitness, NonemptySetCertificate,
-    NonemptySetNativeScript, NonemptySetPlutusData, NonemptySetPlutusV1Script,
-    NonemptySetPlutusV2Script, NonemptySetPlutusV3Script, NonemptySetProposalProcedure,
-    NonemptySetTransactionInput, NonemptySetVkeywitness, RequiredSigners, Script,
-    SetTransactionInput, Slot, TransactionOutputList, Withdrawals,
+    Ed25519KeyHashList, NativeScriptList, NetworkId, NonemptySetBootstrapWitness,
+    NonemptySetCertificate, NonemptySetNativeScript, NonemptySetPlutusData,
+    NonemptySetPlutusV1Script, NonemptySetPlutusV2Script, NonemptySetPlutusV3Script,
+    NonemptySetProposalProcedure, NonemptySetTransactionInput, NonemptySetVkeywitness,
+    RequiredSigners, Script, SetTransactionInput, Slot, TransactionOutputList, Withdrawals,
 };
 use cml_core_wasm::{impl_wasm_cbor_json_api, impl_wasm_conversions};
 use cml_crypto_wasm::{
     AuxiliaryDataHash, DatumHash, Ed25519KeyHash, ScriptDataHash, TransactionHash,
 };
 use wasm_bindgen::prelude::{wasm_bindgen, JsError, JsValue};
-
 pub mod utils;
 
 #[derive(Clone, Debug)]
@@ -208,6 +207,61 @@ impl NativeScript {
                 NativeScriptKind::ScriptInvalidHereafter
             }
         }
+    }
+
+    pub fn verify(
+        &self,
+        lower_bound: Option<Slot>,
+        upper_bound: Option<Slot>,
+        key_hashes: &Ed25519KeyHashList,
+    ) -> bool {
+        fn verify_helper(
+            script: &cml_chain::transaction::NativeScript,
+            lower_bound: Option<Slot>,
+            upper_bound: Option<Slot>,
+            key_hashes: &Ed25519KeyHashList,
+        ) -> bool {
+            match &script {
+                cml_chain::transaction::NativeScript::ScriptPubkey(pub_key) => {
+                    key_hashes.0.contains(&pub_key.ed25519_key_hash)
+                }
+                cml_chain::transaction::NativeScript::ScriptAll(script_all) => {
+                    script_all.native_scripts.iter().all(|sub_script| {
+                        verify_helper(sub_script, lower_bound, upper_bound, key_hashes)
+                    })
+                }
+                cml_chain::transaction::NativeScript::ScriptAny(script_any) => {
+                    script_any.native_scripts.iter().any(|sub_script| {
+                        verify_helper(sub_script, lower_bound, upper_bound, key_hashes)
+                    })
+                }
+                cml_chain::transaction::NativeScript::ScriptNOfK(script_atleast) => {
+                    script_atleast
+                        .native_scripts
+                        .iter()
+                        .map(|sub_script| {
+                            verify_helper(sub_script, lower_bound, upper_bound, key_hashes)
+                        })
+                        .filter(|r| *r)
+                        .count()
+                        >= script_atleast.n as usize
+                }
+                cml_chain::transaction::NativeScript::ScriptInvalidHereafter(timelock_start) => {
+                    match lower_bound {
+                        Some(tx_slot) => tx_slot >= timelock_start.after,
+                        _ => false,
+                    }
+                }
+                cml_chain::transaction::NativeScript::ScriptInvalidBefore(timelock_expiry) => {
+                    match upper_bound {
+                        Some(tx_slot) => tx_slot < timelock_expiry.before,
+                        _ => false,
+                    }
+                }
+            }
+        }
+
+        verify_helper(&self.0, lower_bound, upper_bound, key_hashes)
     }
 
     pub fn as_script_pubkey(&self) -> Option<ScriptPubkey> {
