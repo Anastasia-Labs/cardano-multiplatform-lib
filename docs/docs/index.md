@@ -3,10 +3,10 @@ sidebar_label: "Introduction"
 sidebar_position: 1
 ---
 
-
 # Cardano Multiplatform Lib
 
 This is a library, written in Rust, that can be deployed to multiple platforms (Rust crate, JS, Typescript, WASM, etc). It handles:
+
 - Serialization & deserialization of core data structures
 - Builders to streamline and verify the construction of transactions and related components
 - Useful utility functions for dApps & wallets
@@ -14,9 +14,10 @@ This is a library, written in Rust, that can be deployed to multiple platforms (
 ##### NPM packages
 
 TODO: update these once we publish new versions:
-- browser: [link](https://www.npmjs.com/package/@dcspark/cardano-multiplatform-lib-browser)
-- nodejs: [link](https://www.npmjs.com/package/@dcspark/cardano-multiplatform-lib-nodejs)
-- asm.js (strongly discouraged): [link](https://www.npmjs.com/package/@dcspark/cardano-multiplatform-lib-asmjs)
+
+- browser: [link](https://www.npmjs.com/package/@anastasia-labs/cardano-multiplatform-lib-browser)
+- nodejs: [link](https://www.npmjs.com/package/@anastasia-labs/cardano-multiplatform-lib-nodejs)
+- asm.js (strongly discouraged): [link](https://www.npmjs.com/package/@anastasia-labs/cardano-multiplatform-lib-asmjs)
 
 Note: If you are using WebPack, you must use version 5 or later for CML to work.
 
@@ -28,13 +29,11 @@ Note: If you are using WebPack, you must use version 5 or later for CML to work.
 
 We recommend using Ionic + Capacitor or an equivalent setup to have the WASM bindings working in mobile
 
-
 ## Pre-requisite knowledge
 
 This library assumes a certain amount of knowledge about how Cardano works (to avoid re-documenting the wheel).
 
 You can find the specifications of Cardano's ledger [here](https://github.com/input-output-hk/cardano-ledger-specs) which we suggest consulting as you use this library. Notably, the `Shelley ledger formal specification` covers the core concepts. Make sure to check the specs for later eras as well when needed.
-
 
 ## Benefits of using this library
 

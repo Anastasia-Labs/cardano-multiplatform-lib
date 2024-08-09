@@ -118,9 +118,9 @@ To publish new versions to NPM (only needed if you are an admin of this project)
    npm run js:publish-browser
    npm run js:publish-asm
 
-.. _NodeJS WASM package: https://www.npmjs.com/package/@dcSpark/cardano-multiplatform-lib-nodejs
-.. _Browser (chrome/firefox) WASM package: https://www.npmjs.com/package/@dcSpark/cardano-multiplatform-lib-browser
-.. _Browser (pure JS - no WASM) ASM.js package: https://www.npmjs.com/package/@dcSpark/cardano-multiplatform-lib-asmjs
+.. _NodeJS WASM package: https://www.npmjs.com/package/@anastasia-labs/cardano-multiplatform-lib-nodejs
+.. _Browser (chrome/firefox) WASM package: https://www.npmjs.com/package/@anastasia-labs/cardano-multiplatform-lib-browser
+.. _Browser (pure JS - no WASM) ASM.js package: https://www.npmjs.com/package/@anastasia-labs/cardano-multiplatform-lib-asmjs
 .. _cddl-codegen: https://github.com/Emurgo/cddl-codegen
 .. _Typescript: https://www.typescriptlang.org/
 .. _Flow: https://flow.org/

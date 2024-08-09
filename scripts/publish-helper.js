@@ -10,7 +10,7 @@ const pathToRepo = path.join(__dirname, '..', crateName, 'wasm');
 const oldPkg = require(`${pathToRepo}/publish/package.json`);
 
 const packageNameRoot = hyphenRepoName.split("-wasm")[0];
-oldPkg.name = '@dcspark/' + packageNameRoot + buildType;
+oldPkg.name = '@anastasia-labs/' + packageNameRoot + buildType;
 if (buildType === '-browser' || buildType === '-asmjs') {
   // due to a bug in wasm-pack, this file is missing from browser builds
   const missingFile = `${underscoreRepoName}_bg.js`;
