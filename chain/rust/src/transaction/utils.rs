@@ -25,20 +25,10 @@ impl TransactionOutput {
         datum_option: Option<DatumOption>,
         script_reference: Option<ScriptRef>,
     ) -> Self {
-        match (datum_option, script_reference) {
-            (None, None) => Self::AlonzoFormatTxOut(AlonzoFormatTxOut::new(address, amount)),
-            (Some(DatumOption::Hash { datum_hash, .. }), None) => {
-                let mut tx_out = AlonzoFormatTxOut::new(address, amount);
-                tx_out.datum_hash = Some(datum_hash);
-                Self::AlonzoFormatTxOut(tx_out)
-            }
-            (datum, script_ref) => {
-                let mut tx_out = ConwayFormatTxOut::new(address, amount);
-                tx_out.datum_option = datum;
-                tx_out.script_reference = script_ref;
-                Self::ConwayFormatTxOut(tx_out)
-            }
-        }
+        let mut tx_out = ConwayFormatTxOut::new(address, amount);
+        tx_out.datum_option = datum_option;
+        tx_out.script_reference = script_reference;
+        Self::ConwayFormatTxOut(tx_out)
     }
 
     pub fn address(&self) -> &Address {

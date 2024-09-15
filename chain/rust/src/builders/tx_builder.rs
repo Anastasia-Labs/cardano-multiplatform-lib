@@ -2261,7 +2261,7 @@ mod tests {
                     .with_address(addr_net_0)
                     .next()
                     .unwrap()
-                    .with_value(222)
+                    .with_value(224)
                     .build()
                     .unwrap(),
             )
@@ -2287,8 +2287,8 @@ mod tests {
                 .checked_add(&Value::from(tx_builder.get_fee_if_set().unwrap()))
                 .unwrap()
         );
-        assert_eq!(tx_builder.full_size().unwrap(), 285);
-        assert_eq!(tx_builder.output_sizes(), vec![62, 65]);
+        assert_eq!(tx_builder.full_size().unwrap(), 289);
+        assert_eq!(tx_builder.output_sizes(), vec![64, 67]);
         let _final_tx = tx_builder.build(ChangeSelectionAlgo::Default, &change_addr);
         // just test that it doesn't throw
     }
@@ -2393,8 +2393,8 @@ mod tests {
         tx_builder
             .add_change_if_needed_for_tests(&change_addr)
             .unwrap();
-        assert_eq!(tx_builder.min_fee(false).unwrap(), 214002);
-        assert_eq!(tx_builder.get_fee_if_set().unwrap(), 214002);
+        assert_eq!(tx_builder.min_fee(false).unwrap(), 215002);
+        assert_eq!(tx_builder.get_fee_if_set().unwrap(), 215002);
         assert_eq!(tx_builder.get_deposit().unwrap(), 1000000);
         assert_eq!(tx_builder.outputs.len(), 1);
         assert_eq!(
@@ -2431,7 +2431,7 @@ mod tests {
         let input = {
             SingleInputBuilder::new(
                 TransactionInput::new(genesis_id(), 0),
-                TransactionOutput::new(addr_net_0.clone(), Value::from(222), None, None),
+                TransactionOutput::new(addr_net_0.clone(), Value::from(224), None, None),
             )
             .payment_key()
             .unwrap()
@@ -2444,7 +2444,7 @@ mod tests {
                     .with_address(addr_net_0)
                     .next()
                     .unwrap()
-                    .with_value(222)
+                    .with_value(224)
                     .build()
                     .unwrap(),
             )
@@ -2492,7 +2492,7 @@ mod tests {
                     .with_address(addr_net_0)
                     .next()
                     .unwrap()
-                    .with_value(222)
+                    .with_value(224)
                     .build()
                     .unwrap(),
             )
@@ -2509,7 +2509,7 @@ mod tests {
         assert!(added_change);
         let final_tx = tx_builder.build_body().unwrap();
         assert_eq!(final_tx.outputs.len(), 2);
-        assert_eq!(final_tx.outputs[1].amount().coin, 320);
+        assert_eq!(final_tx.outputs[1].amount().coin, 318);
     }
 
     #[test]
@@ -2682,7 +2682,7 @@ mod tests {
         mass.set(policy_id, name, amount);
 
         // One coin and the minted asset goes into the output
-        let mut output_amount = Value::from(264);
+        let mut output_amount = Value::from(266);
         output_amount.multiasset = mass;
 
         tx_builder
@@ -2710,7 +2710,7 @@ mod tests {
 
         // Change must be one remaining coin because fee is one constant coin
         let change = tx_builder.outputs[1].amount();
-        assert_eq!(change.coin, 499);
+        assert_eq!(change.coin, 497);
         assert!(!change.has_multiassets());
     }
 
@@ -2764,7 +2764,7 @@ mod tests {
         mass.set(policy_id, name.clone(), amount_sent);
 
         // One coin and the minted asset goes into the output
-        let mut output_amount = Value::from(264);
+        let mut output_amount = Value::from(266);
         output_amount.multiasset = mass;
 
         tx_builder
@@ -2792,7 +2792,7 @@ mod tests {
 
         // Change must be one remaining coin because fee is one constant coin
         let change = tx_builder.outputs[1].amount();
-        assert_eq!(change.coin, 299);
+        assert_eq!(change.coin, 297);
         assert!(change.has_multiassets());
 
         assert_eq!(
@@ -2844,7 +2844,7 @@ mod tests {
             tx_builder.add_input(input).unwrap();
         }
 
-        let mut output_amount = Value::from(263);
+        let mut output_amount = Value::from(265);
         output_amount.multiasset = multiassets[2].clone();
 
         tx_builder
@@ -2878,7 +2878,7 @@ mod tests {
                 .unwrap(),
             ma_input1 + ma_input2 - ma_output1
         );
-        assert_eq!(final_tx.outputs[1].amount().coin, 736);
+        assert_eq!(final_tx.outputs[1].amount().coin, 734);
     }
 
     #[test]
@@ -2926,7 +2926,7 @@ mod tests {
             tx_builder.add_input(input).unwrap();
         }
 
-        let mut output_amount = Value::from(263);
+        let mut output_amount = Value::from(265);
         output_amount.multiasset = multiassets[2].clone();
 
         tx_builder
@@ -2952,7 +2952,7 @@ mod tests {
         assert!(added_change);
         let final_tx = tx_builder.build_body().unwrap();
         assert_eq!(final_tx.outputs.len(), 3);
-        assert_eq!(final_tx.outputs[0].amount().coin, 263);
+        assert_eq!(final_tx.outputs[0].amount().coin, 265);
         assert_eq!(
             final_tx.outputs[1]
                 .amount()
@@ -2965,7 +2965,7 @@ mod tests {
         let min_coin_for_dirty_change =
             min_ada_required(&final_tx.outputs[1], coin_per_utxo_byte).unwrap();
         assert_eq!(final_tx.outputs[1].amount().coin, min_coin_for_dirty_change);
-        assert_eq!(final_tx.outputs[2].amount().coin, 473);
+        assert_eq!(final_tx.outputs[2].amount().coin, 469);
         assert!(!final_tx.outputs[2].amount().has_multiassets());
     }
 
@@ -3013,7 +3013,7 @@ mod tests {
             tx_builder.add_input(input).unwrap();
         }
 
-        let output_amount = Value::new(263, multiassets[2].clone());
+        let output_amount = Value::new(265, multiassets[2].clone());
 
         tx_builder
             .add_output(
@@ -3038,7 +3038,7 @@ mod tests {
         assert!(added_change);
         let final_tx = tx_builder.build_body().unwrap();
         assert_eq!(final_tx.outputs.len(), 2);
-        assert_eq!(final_tx.outputs[0].amount().coin, 263);
+        assert_eq!(final_tx.outputs[0].amount().coin, 265);
         assert_eq!(
             final_tx.outputs[1]
                 .amount()
@@ -3049,7 +3049,7 @@ mod tests {
         );
         // The single change output contains more Coin then minimal utxo value
         // But not enough to cover the additional fee for a separate output
-        assert_eq!(final_tx.outputs[1].amount().coin, 336);
+        assert_eq!(final_tx.outputs[1].amount().coin, 330);
     }
 
     #[test]
@@ -3357,7 +3357,7 @@ mod tests {
         )
         .unwrap()
         .to_address();
-        let output_amount = Value::from(208);
+        let output_amount = Value::from(210);
 
         tx_builder
             .add_output(
@@ -3482,7 +3482,7 @@ mod tests {
         )
         .unwrap()
         .to_address();
-        let output_amount = Value::from(208);
+        let output_amount = Value::from(210);
 
         tx_builder
             .add_output(
@@ -4023,13 +4023,13 @@ mod tests {
                     .unwrap(),
             )
             .unwrap();
-        assert_eq!(tx_builder.min_fee(false).unwrap(), 53);
+        assert_eq!(tx_builder.min_fee(false).unwrap(), 55);
         tx_builder.add_utxo(make_input(1u8, Value::from(150)));
         tx_builder.add_utxo(make_input(2u8, Value::from(150)));
         tx_builder.add_utxo(make_input(3u8, Value::from(150)));
         let add_inputs_res = tx_builder.select_utxos(CoinSelectionStrategyCIP2::RandomImprove);
         assert!(add_inputs_res.is_ok(), "{:?}", add_inputs_res.err());
-        assert_eq!(tx_builder.min_fee(false).unwrap(), 264);
+        assert_eq!(tx_builder.min_fee(false).unwrap(), 266);
         let change_addr = ByronAddress::from_base58(
             "Ae2tdPwUPEZGUEsuMAhvDcy94LKsZxDjCbgaiBBMgYpR8sKf96xJmit7Eho",
         )
@@ -4317,7 +4317,7 @@ mod tests {
         )
         .unwrap()
         .to_address();
-        let output_amount = Value::from(208);
+        let output_amount = Value::from(210);
 
         tx_builder
             .add_output(
@@ -4349,9 +4349,9 @@ mod tests {
         assert_eq!(change1.address(), change2.address());
         assert_eq!(change1.address(), change3.address());
 
-        assert_eq!(change1.amount().coin, 274);
-        assert_eq!(change2.amount().coin, 279);
-        assert_eq!(change3.amount().coin, 538);
+        assert_eq!(change1.amount().coin, 276);
+        assert_eq!(change2.amount().coin, 281);
+        assert_eq!(change3.amount().coin, 532);
 
         assert!(change1.amount().has_multiassets());
         assert!(change2.amount().has_multiassets());
@@ -4885,7 +4885,7 @@ mod tests {
 
         let policy_id1 = PolicyId::from([0u8; 28]);
         let multiasset = create_multiasset_one_asset(&policy_id1);
-        let value = Value::new(249, multiasset);
+        let value = Value::new(251, multiasset);
 
         let address = byron_address();
         tx_builder
@@ -4912,7 +4912,7 @@ mod tests {
         let mut tx_builder = create_default_tx_builder();
 
         let address = byron_address();
-        let coin = 208;
+        let coin = 210;
         tx_builder
             .add_output(
                 TransactionOutputBuilder::new()
@@ -4941,7 +4941,7 @@ mod tests {
         let multiasset = create_multiasset_one_asset(&policy_id1);
 
         let address = byron_address();
-        let coin = 249;
+        let coin = 251;
 
         tx_builder
             .add_output(
@@ -4992,7 +4992,7 @@ mod tests {
 
         assert_eq!(out.address().to_raw_bytes(), address.to_raw_bytes());
         assert_eq!(out.amount().multiasset, multiasset);
-        assert_eq!(out.amount().coin, 1086120);
+        assert_eq!(out.amount().coin, 1094740);
     }
 
     #[test]
@@ -5006,7 +5006,7 @@ mod tests {
         let amount = 1234;
 
         let address = byron_address();
-        let coin = 249;
+        let coin = 251;
 
         let result = SingleMintBuilder::new_single_asset(name.clone(), amount).native_script(
             mint_script0,
@@ -5123,7 +5123,7 @@ mod tests {
         let out = &tx_builder.outputs[0];
 
         assert_eq!(out.address().to_raw_bytes(), address.to_raw_bytes());
-        assert_eq!(out.amount().coin, 1086120);
+        assert_eq!(out.amount().coin, 1094740);
 
         let multiasset = &out.amount().multiasset;
 
@@ -5182,7 +5182,7 @@ mod tests {
                     .with_address(byron_address())
                     .next()
                     .unwrap()
-                    .with_value(208)
+                    .with_value(210)
                     .build()
                     .unwrap(),
             )
@@ -5192,7 +5192,7 @@ mod tests {
         let total_output_before_mint = tx_builder.get_total_output().unwrap();
 
         assert_eq!(total_input_before_mint.coin, 300);
-        assert_eq!(total_output_before_mint.coin, 208);
+        assert_eq!(total_output_before_mint.coin, 210);
         let ma1_input = &total_input_before_mint.multiasset;
         let ma1_output = &total_output_before_mint;
         assert_eq!(ma1_input.get(&policy_id1, &name).unwrap(), 360);
@@ -5217,7 +5217,7 @@ mod tests {
         let total_output_after_mint = tx_builder.get_total_output().unwrap();
 
         assert_eq!(total_input_after_mint.coin, 300);
-        assert_eq!(total_output_before_mint.coin, 208);
+        assert_eq!(total_output_before_mint.coin, 210);
         let ma2_input = total_input_after_mint.multiasset;
         let ma2_output = total_output_after_mint.multiasset;
         assert_eq!(ma2_input.get(&policy_id1, &name).unwrap(), 400);
@@ -5368,7 +5368,7 @@ mod tests {
         }
 
         let original_tx_fee = tx_builder.min_fee(false).unwrap();
-        assert_eq!(original_tx_fee, 469629);
+        assert_eq!(original_tx_fee, 469937);
         tx_builder.set_fee(897753);
 
         {
@@ -5378,7 +5378,7 @@ mod tests {
             );
         }
         let tx = tx_builder.build(ChangeSelectionAlgo::Default, &Address::from_bech32("addr1q9tzwgthsm4hs8alk5v3rgjn7nf9pldlmnc3nrns6dvct2dqzvgjxvajrmzsvwh9fucmp65gxc6mv3fskurctfyuj5zqc7q30l").unwrap()).unwrap();
-        assert_eq!(hex::encode(tx.body.to_cbor_bytes()), "a70081825820473899cb48414442ea107735f7fc3e020f0293122e9d05e4be6f03ffafde5a0c00018283581d71aba3c2914116298a146af57d8156b1583f183fc05c0aa48ee95bec71821a001c41caa1581c6bec713b08a2d7c64baa3596d200b41b560850919d72e634944f2d52a14f537061636542756442696433303533015820f7f2f57c58b5e4872201ab678928b0d63935e82d022d385e1bad5bfe347e89d8825839015627217786eb781fbfb51911a253f4d250fdbfdcf1198e70d35985a9a013112333b21ec5063ae54f31b0ea883635b64530b70785a49c95041a040228dd021a000db2d907582029ed935cc80249c4de9f3e96fdcea6b7da123a543bbe75fffe9e2c66119e426d0b58201907c235a0df870e95152669f7c147d6e3a7e251b57e4d5227556d1fd0caca0b0d81825820a90a895d07049afc725a0d6a38c6b82218b8d1de60e7bd70ecdd58f1d9e1218b000e81581c1c616f1acb460668a9b2f123c80372c2adad3583b9c6cd2b1deeed1c");
+        assert_eq!(hex::encode(tx.body.to_cbor_bytes()), "a70081825820473899cb48414442ea107735f7fc3e020f0293122e9d05e4be6f03ffafde5a0c000182a300581d71aba3c2914116298a146af57d8156b1583f183fc05c0aa48ee95bec7101821a001c41caa1581c6bec713b08a2d7c64baa3596d200b41b560850919d72e634944f2d52a14f537061636542756442696433303533010282005820f7f2f57c58b5e4872201ab678928b0d63935e82d022d385e1bad5bfe347e89d8a2005839015627217786eb781fbfb51911a253f4d250fdbfdcf1198e70d35985a9a013112333b21ec5063ae54f31b0ea883635b64530b70785a49c9504011a040228dd021a000db2d907582029ed935cc80249c4de9f3e96fdcea6b7da123a543bbe75fffe9e2c66119e426d0b58201907c235a0df870e95152669f7c147d6e3a7e251b57e4d5227556d1fd0caca0b0d81825820a90a895d07049afc725a0d6a38c6b82218b8d1de60e7bd70ecdd58f1d9e1218b000e81581c1c616f1acb460668a9b2f123c80372c2adad3583b9c6cd2b1deeed1c");
     }
 
     #[test]
@@ -5554,7 +5554,7 @@ mod tests {
         );
 
         let tx = &signed_tx_builder.body;
-        assert_eq!(hex::encode(tx.to_cbor_bytes()), "a70081825820473899cb48414442ea107735f7fc3e020f0293122e9d05e4be6f03ffafde5a0c00018283581d71aba3c2914116298a146af57d8156b1583f183fc05c0aa48ee95bec71821a001c41caa1581c6bec713b08a2d7c64baa3596d200b41b560850919d72e634944f2d52a14f537061636542756442696433303533015820f7f2f57c58b5e4872201ab678928b0d63935e82d022d385e1bad5bfe347e89d8825839015627217786eb781fbfb51911a253f4d250fdbfdcf1198e70d35985a9a013112333b21ec5063ae54f31b0ea883635b64530b70785a49c95041a040228dd021a000db2d907582029ed935cc80249c4de9f3e96fdcea6b7da123a543bbe75fffe9e2c66119e426d0b58201907c235a0df870e95152669f7c147d6e3a7e251b57e4d5227556d1fd0caca0b0d81825820a90a895d07049afc725a0d6a38c6b82218b8d1de60e7bd70ecdd58f1d9e1218b000e81581c1c616f1acb460668a9b2f123c80372c2adad3583b9c6cd2b1deeed1c");
+        assert_eq!(hex::encode(tx.to_cbor_bytes()), "a70081825820473899cb48414442ea107735f7fc3e020f0293122e9d05e4be6f03ffafde5a0c000182a300581d71aba3c2914116298a146af57d8156b1583f183fc05c0aa48ee95bec7101821a001c41caa1581c6bec713b08a2d7c64baa3596d200b41b560850919d72e634944f2d52a14f537061636542756442696433303533010282005820f7f2f57c58b5e4872201ab678928b0d63935e82d022d385e1bad5bfe347e89d8a2005839015627217786eb781fbfb51911a253f4d250fdbfdcf1198e70d35985a9a013112333b21ec5063ae54f31b0ea883635b64530b70785a49c9504011a040228dd021a000db2d907582029ed935cc80249c4de9f3e96fdcea6b7da123a543bbe75fffe9e2c66119e426d0b58201907c235a0df870e95152669f7c147d6e3a7e251b57e4d5227556d1fd0caca0b0d81825820a90a895d07049afc725a0d6a38c6b82218b8d1de60e7bd70ecdd58f1d9e1218b000e81581c1c616f1acb460668a9b2f123c80372c2adad3583b9c6cd2b1deeed1c");
     }
 
     #[test]
