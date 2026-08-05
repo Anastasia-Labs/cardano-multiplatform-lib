@@ -10,25 +10,27 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
       - uses: actions/setup-node@v4
         with:
           node-version: 'lts/iron'
       - name: Cache node modules
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+            ${{ runner.os }}-node-
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
       - name: prepare-rust
+        # Toolchain, components (rustfmt/clippy) and the wasm32 target are pinned in
+        # rust-toolchain.toml; the bare `rustup toolchain install` reads that file.
         run: |
-          rustup install stable
-          rustup target add wasm32-unknown-unknown --toolchain stable
+          rustup toolchain install
+          rustup show
           curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
       - name: install
         run: |
@@ -43,15 +45,11 @@ jobs:
         run: |
           npm run rust:build-browser
       - name: cargo-fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
+        run: cargo fmt --all -- --check
       - name: cargo-clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: --workspace --all-features --all-targets -- --deny "clippy::all"
+        # The gate (deny level + allow list) is defined once in ./clippy.sh — do not
+        # restate lint flags here.
+        run: ./clippy.sh
       - name: all:test
         run: cargo test
       - name: cml:install
